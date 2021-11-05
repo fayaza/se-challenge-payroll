@@ -8,16 +8,21 @@ Please commit the following to this `README.md`:
    - If this application was destined for a production environment, what would you add or change?
    - What compromises did you have to make as a result of the time constraints of this challenge?
 
-### Code Architecture
+## Submission Instructions
 
+1. Clone the repository.
+1. Complete your project as described above within your local repository.
+1. Ensure everything you want to commit is committed.
+1. Create a git bundle: `git bundle create your_name.bundle --all`
+1. Email the bundle file to [dev.careers@waveapps.com](dev.careers@waveapps.com) and CC the recruiter you have been in contact with.
+### Code Architecture
 Following folder structure has been used in order to segregate different concepts
 1. **Contorller:** Main endpoint for the API which will have one POST method to load and save th efile content and one GET method to generate the structured report.
 2. **Model:** Contains the classes that are both bind with the database or custom created
 3. **Utility:** Consits of helper classes that can be called multiple time like checking nulls. Also contains logic to generate logic of the report
 4. **Temp:** tempoary storage of uploaded file which should be deleted once the data is loaded into database
 5. **Respository:** Handle to manage the communication between the controller and the database layer. The controller should not connect directly to database
-
-### Environment Setup
+## Environment Setup
 
 The solution has been created in .NET C# using dotnet webapi 3.1 with MySQL as database. Therefore below steps must be performed in order to setup locally and run the application.
 
@@ -64,10 +69,15 @@ Open the cmd or git bash as admin , move to the PayrollAPI root directly and run
 **dotnet run** which will open the instance
 
 once the application is running, you can use:
-https://localhost:5001/index.html - this will open SwaggerUI to you can easily test both the API
-https://localhost:5001/api/payroll/report - Alternatively, the GET API
-https://localhost:5001/api/payroll/upload - use Postman or any other API for the POST API by providing the file as input
+- https://localhost:5001/index.html - this will open SwaggerUI for you for easy access of API
+- https://localhost:5001/api/payroll/report - Alternatively, the GET API which can be run directly
+- https://localhost:5001/api/payroll/upload - use Postman or any other API for the POST API by providing the file as input
+
 ![img_postman_upload](https://raw.githubusercontent.com/fayaza/se-challenge-payroll/master/setup_images/postman_upload.PNG)
+
+
+
+
 
 
 ## Discussion Points
@@ -77,7 +87,7 @@ Following approaches used to run the testing process:
     1. The code holds a response object for every breakpoint which can deviate from the expected result. Few instructions mentioend in the requirement treated as the assumption like the application will not check the file name formating etc
     2. Developer testing has been done by executing all the scenerio to make sure it return expected response message in different situation
     3. The response message comprises of "status" which can be error/success and a "message" to display meaningful information. It response will return appropoate status code as well like 200, 500,422 etc
-    4. Unit test has been added in the solution to execute the API with the concept of AAA (arrange ,act, assert) and matching the expectation with the actual result
+    4. Unit test has been added in the solution to execute the API with the concept of AAA (arrange, act, assert) and matching the expectation with the actual result
 - **If this application was destined for a production environment, what would you add or change?**
     1. Adding the authorization on the API so it can only be access by authorize people. Also API request can be alter to add more setting in order to avoid injection and hijacking.
     2. Continuous monitoring system/process should be in placed in order to check the status and mitigate the risk before it actuall happen. For example, page size can be defined in order to restrict the result in response loading time is more than 5 seconds
