@@ -58,6 +58,9 @@ namespace PayrollAPI
                     {
                         amount = float.Parse(row["hours_worked"].ToString()) * float.Parse(group_row["rate"].ToString());
                     }
+                    
+                    //if key is present means recorded exists so add in the existing record else create new
+                    //it will do the same even if the hour report is for sample employee and same date but in more than one file
 
                     var report_exist = (from a in report where a.key == employee_report_key select a).FirstOrDefault();
                     if (report_exist != null)
@@ -76,7 +79,6 @@ namespace PayrollAPI
                             employee_id = employee_id,
                             pay_period = new PayPeriod { start_date = start_date, end_date = end_date },
                             amount_paid_text = string.Format(Constant.report_amount_format, amount)
-
                         });
                     }
                     

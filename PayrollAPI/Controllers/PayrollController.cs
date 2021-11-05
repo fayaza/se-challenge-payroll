@@ -29,7 +29,11 @@ namespace PayrollAPI.Controllers
             payrollQuery = repository;
         }
 
-
+        /// <summary>
+        /// Prompt to upload time keeping file for storage and reporting purpose
+        /// </summary>
+        /// <param name="input_file"></param>
+        /// <returns>message of with uplaod information</returns>
         [HttpPost("upload")]
         [Consumes("multipart/form-data")]
         public IActionResult PushTimeKeeping(IFormFile input_file)
@@ -53,7 +57,7 @@ namespace PayrollAPI.Controllers
                     _responseMessage.MessageText = "Invalid extension of the file, please try again with csv format.";
                     return BadRequest(_responseMessage);//400
                 }
-                string file_id = Helper.GetFileNameWithoutExtension(file_name).Split('-')[2];
+                string file_id = Helper.GetFileNameWithoutExtension(file_name).Split('-')[2]; //assuming file format is correct
                 if (!string.IsNullOrEmpty(file_id))
                 {
                     int file_id_int = Int32.Parse(file_id);
@@ -62,7 +66,8 @@ namespace PayrollAPI.Controllers
                     {
                         _responseMessage.MessageStatus = "error";
                         _responseMessage.MessageText = string.Format("File information already exists for the ID '{0}', please upload file with another ID",file_id_int);
-                        return StatusCode(StatusCodes.Status422UnprocessableEntity, _responseMessage);
+                        return UnprocessableEntity(_responseMessage);
+
                     }
                     //temp saving the file in local
                     save_path = Path.Combine(Directory.GetCurrentDirectory(), "Temp", file_name);
@@ -109,8 +114,8 @@ namespace PayrollAPI.Controllers
                         return StatusCode(StatusCodes.Status500InternalServerError, _responseMessage);
                     }
                     finally
-                    {   //delete the temp file in all cases to avoid extra space
-                        System.IO.File.Delete(save_path);
+                    {   
+                        System.IO.File.Delete(save_path); //delete the temp file in all cases to avoid extra space
                     }
 
                     _responseMessage.MessageStatus = "success";
@@ -123,16 +128,18 @@ namespace PayrollAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Display the payroll report in the structured way
+        /// </summary>
+        /// <returns>json</returns>
         [HttpGet("report")]
         public IActionResult GetPayrollReport()
         {
-            
             var _responseMessage = new ResponseMessage();
             try
             {
-               
                 List<DBTimeReportLog> time_log = payrollQuery.GetTimeReportLogs();
-                List<DBJobGroup> rates = payrollQuery.GetJobGroups();
+                List<DBJobGroup> rates = payrollQuery.GetJobGroups(); //loading job group which is pre-defined
 
                 DataTable log_table = Helper.ToDataTable(time_log);
                 DataTable rate_table = Helper.ToDataTable(rates);
@@ -140,19 +147,19 @@ namespace PayrollAPI.Controllers
                 if (Helper.IsDataExists(log_table))
                 {
                     PayrollReport report = new PayrollReport();
-                    report.employee_reports = Helper.GenerateReport(log_table, rate_table);
+                    report.employee_reports = Helper.GenerateReport(log_table, rate_table); //report generation
                     PayrollReportResponse report_response = new PayrollReportResponse
                     {
                         payrollreport = report
                      };
                    
-                    return Ok(report_response);
+                    return Ok(report_response); //wrapping in the specific structured before sending back
                 }
                 else
                 {
                     _responseMessage.MessageStatus = "error";
                     _responseMessage.MessageText = "No record found, please upload a file or try again later.";
-                    return StatusCode(StatusCodes.Status422UnprocessableEntity, _responseMessage);
+                    return UnprocessableEntity(_responseMessage); //422, server accpted but custom validation
                 }
 
             }
