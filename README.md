@@ -65,15 +65,23 @@ The instance once run on port 5001 which can be change from _Properties/launchse
 Open the cmd or git bash as admin , move to the PayrollAPI root directly and run the following commands:
 
 **dotnet restore** which will restore the dependecies
+
+![img_dotnet_restore](https://raw.githubusercontent.com/fayaza/se-challenge-payroll/master/setup_images/dotnet_restore.png)
+
 **dotnet build** which will build the solution to will check for complier error
+
+![img_dotnet_build](https://raw.githubusercontent.com/fayaza/se-challenge-payroll/master/setup_images/dotnet_build.png)
+
 **dotnet run** which will open the instance
+
+![img_dotnet_run](https://raw.githubusercontent.com/fayaza/se-challenge-payroll/master/setup_images/dotnet_run.png)
 
 once the application is running, you can use:
 - https://localhost:5001/index.html - this will open SwaggerUI for you for easy access of API
 - https://localhost:5001/api/payroll/report - Alternatively, the GET API which can be run directly
 - https://localhost:5001/api/payroll/upload - use Postman or any other API for the POST API by providing the file as input
 
-![img_postman_upload](https://raw.githubusercontent.com/fayaza/se-challenge-payroll/master/setup_images/postman_upload.PNG)
+![img_postman_upload](https://raw.githubusercontent.com/fayaza/se-challenge-payroll/master/setup_images/postman_upload.png)
 
 
 
